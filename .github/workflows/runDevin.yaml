@@ -14,17 +14,8 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Set Executable Permissions for Devin's Script
+        run: chmod +x runDevin.sh
+
       - name: Start Devin
-        run: |
-          docker run \
-            --pull=always \
-            -e SANDBOX_USER_ID=$(id -u) \
-            -e PERSIST_SANDBOX="true" \
-            -e SSH_PASSWORD=$SSH_PASSWORD \
-            -e WORKSPACE_MOUNT_PATH=${WORKSPACE_BASE:-/default/workspace/path} \
-            -v ${WORKSPACE_BASE:-/default/workspace/path}:/actions-runner \
-            -v /var/run/docker.sock:/var/run/docker.sock \
-            -p 3000:3000 \
-            --add-host host.docker.internal:host-gateway \
-            --name opendevin-app-$(date +%Y%m%d%H%M%S) \
-            ghcr.io/opendevin/opendevin:0.6
+        run: ./runDevin.sh
